@@ -5,8 +5,10 @@ import CardList from './components/card-list/CardList'
 class App extends Component {
   constructor(){
     super();
+
     this.state = {
-      monsters: []
+      monsters: [],
+      searchField: ''
     }
   }
   componentDidMount(){
@@ -15,12 +17,20 @@ class App extends Component {
     .then(users => this.setState({monsters: users}))
   }
   render() {
+    const { monsters, searchField } = this.state;
+    // set filtered monsters array 
+    const filteredMonsters = monsters.filter(monster => monster.name.toLowerCase()
+    .includes(searchField.toLowerCase()))
+
     return (
 
       <div className="App">
-        <CardList monsters={this.state.monsters}>
-
-        </CardList>
+        <input type='search' placeholder="Search monsters" 
+        // whenever we call setState() the render() recall itself to render updated state
+        onChange={e => this.setState({searchField: e.target.value}, 
+        // () => console.log(this.state)
+        )} />
+        <CardList monsters={filteredMonsters} />
       </div>
     );
   }
